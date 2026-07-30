@@ -1,0 +1,29 @@
+# Deploy no GitHub Pages
+
+## Pré-requisitos
+
+- Repositório GitHub com o nome `grimorios-arcana`.
+- Branch principal publicada no GitHub.
+- Permissão de escrita no repositório para a publicação da branch `gh-pages`.
+
+## Publicação manual
+
+```bash
+npm ci
+npm run deploy:pages
+```
+
+O comando usa `angular-cli-ghpages`, gera a aplicação com `base href` `/grimorios-arcana/` e publica o conteúdo de produção na branch `gh-pages`.
+
+## Publicação automatizada
+
+O workflow em `.github/workflows/deploy-pages.yml` executa build e publicação a cada push na branch principal.
+
+## Checklist pós-publicação
+
+- Abrir a URL do Pages.
+- Recarregar a rota inicial.
+- Criar um personagem.
+- Salvar e recarregar a página.
+- Exportar o JSON.
+- Testar em tela estreita.

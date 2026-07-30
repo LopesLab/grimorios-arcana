@@ -1,0 +1,206 @@
+<main class="app-shell">
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">✦</div>
+    <div>
+      <p class="eyebrow">GRIMÓRIOS DE ARCANA · FORJA DO GRIMÓRIO</p>
+      <p class="brand-name">Seu primeiro círculo começa aqui.</p>
+    </div>
+    <span class="status-badge">MVP · PLAYTEST</span>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow accent">ETAPA 0{{ stage() >= 3 ? 3 : stage() }} / 03</p>
+      <h1>Desperte o seu mago.</h1>
+      <p class="hero-copy">Dê um nome à sua história e distribua os fundamentos que vão sustentar sua mana, suas reações e seu grimório.</p>
+    </div>
+    <div class="stepper" aria-label="Progresso da criação">
+      <span class="step" [class.active]="stage() === 1">1 <small>Identidade</small></span>
+      <span class="step" [class.active]="stage() === 2">2 <small>Essência</small></span>
+      <span class="step" [class.active]="stage() >= 3">3 <small>Grimório</small></span>
+    </div>
+  </section>
+
+  @if (stage() === 1) {
+  <section class="content-grid">
+    <form class="creation-card" aria-labelledby="identity-title" (submit)="$event.preventDefault()">
+      <div class="card-heading">
+        <div>
+          <p class="eyebrow accent">O NOME É A PRIMEIRA MAGIA</p>
+          <h2 id="identity-title">Identidade do personagem</h2>
+        </div>
+        <span class="card-number">01</span>
+      </div>
+
+      <label class="field-label" for="character-name">Nome do mago <span>*</span></label>
+      <input id="character-name" class="text-input" type="text" placeholder="Ex.: Aster Vale" [value]="name()" (input)="name.set($any($event.target).value)" />
+
+      <label class="field-label" for="character-concept">Conceito <em>opcional</em></label>
+      <textarea id="character-concept" class="text-input textarea" rows="3" placeholder="Quem é este mago antes da próxima missão?" [value]="concept()" (input)="concept.set($any($event.target).value)"></textarea>
+
+      <div class="divider"></div>
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow accent">OS CINCO FUNDAMENTOS</p>
+          <h2>Atributos</h2>
+        </div>
+        <span class="helper-text">Distribua 16 · 14 · 12 · 10 · 8</span>
+      </div>
+
+      <div class="attributes-grid">
+        @for (attribute of attributeCards; track attribute.key) {
+          <label class="attribute-card" [class.invalid]="!isValid() && attributeValue(attribute.key) === 0">
+            <span class="attribute-topline">
+              <span class="attribute-name">{{ attribute.label }}</span>
+              <span class="attribute-percent">{{ attributePercentage(attribute.key) }}%</span>
+            </span>
+            <span class="attribute-description">{{ attribute.description }}</span>
+            <select class="attribute-select" [value]="attributeValue(attribute.key)" [attr.aria-label]="'Valor de ' + attribute.label" (change)="setAttribute(attribute.key, $event)">
+              @for (value of availableValues; track value) {
+                <option [value]="value">{{ value }}</option>
+              }
+            </select>
+          </label>
+        }
+      </div>
+
+      @if (!attributesAreValid()) {
+        <p class="validation-message" role="alert">Cada valor inicial deve ser usado uma única vez.</p>
+      }
+    </form>
+
+    <aside class="summary-column" aria-label="Resumo do personagem">
+      <div class="resource-card">
+        <p class="eyebrow accent">RESUMO EM TEMPO REAL</p>
+        <h2>{{ name() || 'Mago sem nome' }}</h2>
+        <p class="summary-concept">{{ concept() || 'Seu conceito aparecerá aqui.' }}</p>
+        <div class="resource-grid">
+          <div class="resource"><span class="resource-value">{{ resources().manaMaximum }}</span><span class="resource-label">Mana máxima</span></div>
+          <div class="resource"><span class="resource-value">{{ resources().hitPointsMaximum }}</span><span class="resource-label">Pontos de vida</span></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <p class="eyebrow accent">PRÓXIMA ETAPA</p>
+        <h3>Escolha sua identidade mágica</h3>
+        <p>Na próxima etapa, você combinará uma Afinidade com um Comportamento de Mana para definir o que seu grimório pode fazer.</p>
+        <div class="pill-row"><span>1 Afinidade</span><span>1 Comportamento</span><span>3 Magias</span></div>
+      </div>
+
+      <div class="action-row">
+        <button type="button" class="button secondary" (click)="reset()">Limpar</button>
+        <button type="button" class="button primary" [disabled]="!isValid()" (click)="continueFromIdentity()">Continuar <span aria-hidden="true">→</span></button>
+      </div>
+      @if (!name().trim()) {
+        <p class="action-hint">Dê um nome ao personagem para continuar.</p>
+      }
+    </aside>
+  </section>
+  }
+
+  @if (stage() === 2) {
+    <section class="content-grid magic-identity-layout">
+      <div class="creation-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow accent">ETAPA 02 / 03 · A IDENTIDADE DA MANA</p>
+            <h2>Escolha sua essência mágica</h2>
+          </div>
+          <span class="card-number">02</span>
+        </div>
+        <p class="section-intro">A Afinidade diz o que você manifesta. O Comportamento diz como sua mana se move pelo mundo.</p>
+
+        <div class="choice-section">
+          <div class="section-heading"><div><p class="eyebrow accent">O QUE É MANIFESTADO</p><h2>Afinidade</h2></div><span class="selection-count">1 escolhida</span></div>
+          <div class="choice-grid">
+            @for (affinity of affinities; track affinity.id) {
+              <button type="button" class="choice-card" [class.selected]="affinityId() === affinity.id" (click)="selectAffinity(affinity)">
+                <span class="choice-icon">✦</span><span class="choice-name">{{ affinity.name }}</span><span class="choice-description">{{ affinity.description }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="choice-section behavior-section">
+          <div class="section-heading"><div><p class="eyebrow accent">COMO A MANA SE MOVE</p><h2>Comportamento de Mana</h2></div><span class="selection-count">1 escolhido</span></div>
+          <div class="choice-grid">
+            @for (behavior of manaBehaviors; track behavior.id) {
+              <button type="button" class="choice-card" [class.selected]="manaBehaviorId() === behavior.id" (click)="selectManaBehavior(behavior)">
+                <span class="choice-icon">◌</span><span class="choice-name">{{ behavior.name }}</span><span class="choice-description">{{ behavior.description }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="action-row"><button type="button" class="button secondary" (click)="backToIdentity()">← Voltar</button><button type="button" class="button primary" (click)="openGrimoire()">Abrir grimório <span aria-hidden="true">→</span></button></div>
+      </div>
+
+      <aside class="summary-column"><div class="resource-card identity-preview"><p class="eyebrow accent">IDENTIDADE EM FORMAÇÃO</p><h2>{{ name() }}</h2><div class="identity-pair"><span>{{ selectedAffinity().name }}</span><b>+</b><span>{{ selectedManaBehavior().name }}</span></div><p class="summary-concept">{{ selectedAffinity().fantasy }} {{ selectedManaBehavior().limitation }}</p></div><div class="info-card"><p class="eyebrow accent">REGRA CENTRAL</p><h3>Toda magia nasce da combinação.</h3><p>Suas três magias iniciais deverão respeitar a Afinidade e o Comportamento escolhidos.</p></div></aside>
+    </section>
+  }
+
+  @if (stage() === 3) {
+    <section class="content-grid grimoire-layout">
+      <div class="creation-card grimoire-card">
+        <div class="card-heading"><div><p class="eyebrow accent">ETAPA 03 / 03 · GRIMÓRIO DE TRÊS FOLHAS</p><h2>O espaço para suas técnicas</h2></div><span class="card-number">03</span></div>
+        <p class="section-intro">Seu grimório começa com três páginas em branco. Na próxima etapa, cada uma receberá uma magia construída por componentes.</p>
+        <div class="spell-slots">
+          @for (slot of [1, 2, 3]; track slot) { <div class="spell-slot"><span class="slot-number">0{{ slot }}</span><span class="slot-symbol">✧</span><span class="slot-title">Página em branco</span><span class="slot-caption">Magia inicial</span></div> }
+        </div>
+        <div class="action-row"><button type="button" class="button secondary" (click)="backToMagicIdentity()">← Alterar essência</button><button type="button" class="button primary" (click)="openSpellForge()">Forjar magias <span aria-hidden="true">→</span></button></div>
+        <p class="action-hint neutral">Cada página receberá uma técnica construída por componentes.</p>
+      </div>
+      <aside class="summary-column"><div class="resource-card identity-preview"><p class="eyebrow accent">GRIMÓRIO DE {{ name() | uppercase }}</p><h2>{{ selectedAffinity().name }} + {{ selectedManaBehavior().name }}</h2><p class="summary-concept">Uma identidade mágica pronta para receber três técnicas.</p><div class="resource-grid"><div class="resource"><span class="resource-value">{{ resources().manaMaximum }}</span><span class="resource-label">Mana máxima</span></div><div class="resource"><span class="resource-value">{{ resources().hitPointsMaximum }}</span><span class="resource-label">Pontos de vida</span></div></div></div><div class="info-card"><p class="eyebrow accent">PRÓXIMA FASE</p><h3>Forje habilidades com limites claros.</h3><p>O editor calculará o custo de cada magia e mostrará as escolhas que tornam sua técnica única.</p></div></aside>
+    </section>
+  }
+
+  @if (stage() === 4) {
+    <section class="content-grid spell-forge-layout">
+      <div class="creation-card forge-card">
+        <div class="card-heading"><div><p class="eyebrow accent">FORJA DE MAGIAS · {{ selectedSpellIndex() + 1 }} / 3</p><h2>Construa sua técnica</h2></div><span class="card-number">0{{ selectedSpellIndex() + 1 }}</span></div>
+        <p class="section-intro">{{ selectedAffinity().name }} + {{ selectedManaBehavior().name }} <span class="dot-separator">·</span> O custo é calculado enquanto você cria.</p>
+
+        <div class="spell-tabs" aria-label="Páginas do grimório">
+          @for (spell of spells(); track spell.id; let index = $index) { <button type="button" class="spell-tab" [class.selected]="selectedSpellIndex() === index" (click)="selectSpell(index)"><span>0{{ index + 1 }}</span>{{ spell.name || 'Página em branco' }} @if (spellIsComplete(spell)) { <b>✓</b> }</button> }
+        </div>
+
+        <div class="forge-field-grid">
+          <label class="field-label">Nome da técnica <span>*</span><input class="text-input" type="text" placeholder="Ex.: Jato Comprimido" [value]="selectedSpell().name" (input)="setSpellField('name', $event)" /></label>
+          <label class="field-label">Função principal <span>*</span><select class="text-input" [value]="selectedSpell().primaryFunctionId" (change)="setSpellField('primaryFunctionId', $event)">@for (fn of magicFunctions; track fn.id) { <option [value]="fn.id">{{ fn.name }}</option> }</select></label>
+        </div>
+        <label class="field-label">Descrição da técnica <span>*</span><textarea class="text-input textarea" rows="3" placeholder="Descreva como a Afinidade e o Comportamento se combinam." [value]="selectedSpell().description" (input)="setSpellField('description', $event)"></textarea></label>
+
+        <div class="divider"></div><div class="section-heading"><div><p class="eyebrow accent">ENTREGA DO EFEITO</p><h2>Parâmetros</h2></div><span class="helper-text">Escolhas com custo Mana</span></div>
+        <div class="forge-field-grid four-columns">
+          <label class="field-label">Potência<select class="text-input" [value]="selectedSpell().potency" (change)="setSpellField('potency', $event)"><option value="minor">Menor</option><option value="standard">Padrão</option><option value="major">Maior</option></select></label>
+          <label class="field-label">Alcance<select class="text-input" [value]="selectedSpell().range" (change)="setSpellField('range', $event)"><option value="self-touch">Pessoal / toque</option><option value="short">Curto</option><option value="medium">Médio</option><option value="long">Longo</option></select></label>
+          <label class="field-label">Área<select class="text-input" [value]="selectedSpell().area" (change)="setSpellField('area', $event)"><option value="single">Um alvo</option><option value="small">Pequena</option><option value="medium">Média</option><option value="large">Grande</option></select></label>
+          <label class="field-label">Velocidade<select class="text-input" [value]="selectedSpell().speed" (change)="setSpellField('speed', $event)"><option value="slow">Lenta</option><option value="normal">Normal</option><option value="fast">Rápida</option><option value="instant">Instantânea</option></select></label>
+        </div>
+        <div class="forge-field-grid two-columns"><label class="field-label">Duração<select class="text-input" [value]="selectedSpell().duration" (change)="setSpellField('duration', $event)"><option value="instant">Instantânea</option><option value="next-turn">Até o próximo turno</option><option value="concentration">Concentração</option><option value="three-rounds">Três rodadas</option><option value="scene">Até o fim da cena</option></select></label><label class="field-label">Função secundária <em>opcional</em><select class="text-input" [value]="selectedSpell().secondaryFunctionId || 'none'" (change)="setSpellField('secondaryFunctionId', $event)"><option value="none">Nenhuma</option>@for (fn of magicFunctions; track fn.id) { <option [value]="fn.id">{{ fn.name }}</option> }</select></label></div>
+
+        <div class="divider"></div><div class="section-heading"><div><p class="eyebrow accent">MODIFICADORES</p><h2>Propriedades e limites</h2></div><span class="helper-text">Apenas efeitos mecânicos</span></div>
+        <div class="option-section"><p class="option-label">Propriedades da técnica</p><div class="option-grid">@for (property of techniqueProperties; track property.id) { <button type="button" class="option-chip" [class.selected]="spellHasOption('propertyIds', property.id)" (click)="toggleSpellOption('propertyIds', property.id)"><span>{{ property.name }}</span><small>+{{ property.cost }}</small></button> }</div></div>
+        <div class="option-section"><p class="option-label">Limitações válidas <span>máx. 2</span></p><div class="option-grid">@for (limitation of spellLimitations; track limitation.id) { <button type="button" class="option-chip limitation" [class.selected]="spellHasOption('limitationIds', limitation.id)" (click)="toggleSpellOption('limitationIds', limitation.id)"><span>{{ limitation.name }}</span><small>-{{ limitation.reduction }}</small></button> }</div></div>
+
+        <div class="action-row"><button type="button" class="button secondary" (click)="backToGrimoire()">← Ver grimório</button><button type="button" class="button primary" [disabled]="!currentSpellComplete()" (click)="saveCurrentSpell()">Salvar técnica <span aria-hidden="true">→</span></button></div>
+        @if (allSpellsComplete()) { <div class="review-prompt"><span>As três páginas estão preenchidas.</span><button type="button" class="text-button" (click)="reviewGrimoire()">Revisar grimório →</button></div> }
+      </div>
+      <aside class="summary-column"><div class="cost-card"><p class="eyebrow accent">CUSTO CALCULADO</p><div class="cost-total"><strong>{{ selectedSpellCost().total }}</strong><span>Mana</span></div><div class="cost-lines"><div><span>Base + função + potência</span><b>{{ selectedSpellCost().base + selectedSpellCost().function + selectedSpellCost().potency }}</b></div><div><span>Entrega</span><b>{{ selectedSpellCost().range + selectedSpellCost().area + selectedSpellCost().speed + selectedSpellCost().duration }}</b></div><div><span>Propriedades</span><b>+{{ selectedSpellCost().properties + selectedSpellCost().secondaryFunction }}</b></div><div><span>Limitações</span><b>{{ selectedSpellCost().limitations }}</b></div></div><div class="tier-costs"><div><span>Normal</span><b>{{ selectedSpellCost().total }}</b></div><div><span>Fortalecida</span><b>{{ selectedSpellCost().total + 2 }}</b></div><div><span>Máxima</span><b>{{ selectedSpellCost().total + 5 }}</b></div></div></div><div class="info-card"><p class="eyebrow accent">IDENTIDADE MÁGICA</p><h3>{{ selectedAffinity().name }} + {{ selectedManaBehavior().name }}</h3><p>Uma técnica válida precisa respeitar os limites desta combinação.</p></div></aside>
+    </section>
+  }
+
+  @if (stage() === 5) {
+    <section class="content-grid review-layout">
+      <div class="creation-card review-card">
+        <div class="card-heading"><div><p class="eyebrow accent">REVISÃO FINAL · GRIMÓRIO PRONTO</p><h2>{{ name() }}</h2></div><span class="card-number">✦</span></div>
+        <p class="section-intro">{{ concept() || 'Um mago pronto para transformar mana em técnica.' }} <span class="dot-separator">·</span> {{ selectedAffinity().name }} + {{ selectedManaBehavior().name }}</p>
+        <div class="review-resources"><div><strong>{{ resources().manaMaximum }}</strong><span>Mana máxima</span></div><div><strong>{{ resources().hitPointsMaximum }}</strong><span>Pontos de vida</span></div><div><strong>03</strong><span>Magias iniciais</span></div></div>
+        <div class="review-spells">@for (spell of spells(); track spell.id; let index = $index) { <article class="review-spell"><div class="review-spell-top"><span class="slot-number">0{{ index + 1 }} · {{ magicFunctions.find((fn) => fn.id === spell.primaryFunctionId)?.name }}</span><span class="review-cost">{{ rules.spellCost(spell).total }} Mana</span></div><h3>{{ spell.name }}</h3><p>{{ spell.description }}</p><div class="review-tags"><span>{{ spell.potency === 'minor' ? 'Menor' : spell.potency === 'major' ? 'Maior' : 'Padrão' }}</span><span>{{ spell.speed === 'fast' ? 'Rápida' : spell.speed === 'slow' ? 'Lenta' : spell.speed === 'instant' ? 'Instantânea' : 'Normal' }}</span>@for (propertyId of spell.propertyIds; track propertyId) { <span>{{ techniqueProperties.find((property) => property.id === propertyId)?.name }}</span> }</div></article> }</div>
+        <div class="action-row"><button type="button" class="button secondary" (click)="backToForge()">← Editar magias</button><button type="button" class="button primary" (click)="saveCharacter()">Salvar grimório <span aria-hidden="true">✓</span></button></div>
+      </div>
+      <aside class="summary-column"><div class="resource-card save-card"><p class="eyebrow accent">FICHA LOCAL</p><h2>{{ savedCharacter() ? 'Grimório salvo.' : 'Pronto para salvar.' }}</h2><p class="summary-concept">{{ savedCharacter() ? 'Sua ficha está guardada neste navegador.' : 'Salve para manter este personagem e liberar a exportação.' }}</p><button type="button" class="button primary full-button" [disabled]="!savedCharacter()" (click)="exportCharacter()">Baixar JSON <span aria-hidden="true">↓</span></button></div><div class="info-card"><p class="eyebrow accent">STATUS DO PLAYTEST</p><h3>Regras experimentais visíveis.</h3><p>Custos e propriedades estão marcados como parte do MVP e podem evoluir com os testes.</p></div></aside>
+    </section>
+  }
+</main>
