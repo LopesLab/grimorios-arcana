@@ -19,6 +19,14 @@ O comando gera a aplicação com `base href` `/grimorios-arcana/` e usa `angular
 
 O workflow em `.github/workflows/deploy-pages.yml` executa build e publicação a cada push na branch principal.
 
+Depois do primeiro deploy, habilite o Pages em `Settings → Pages` com:
+
+- **Source:** Deploy from a branch
+- **Branch:** `gh-pages`
+- **Pasta:** `/ (root)`
+
+O workflow publica na branch `gh-pages`; portanto, a opção “GitHub Actions” não é a fonte correta para esta configuração atual.
+
 ## Checklist pós-publicação
 
 - Abrir a URL do Pages.
