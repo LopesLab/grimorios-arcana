@@ -51,6 +51,8 @@ O primeiro workflow falhou porque `ng deploy` não aceitava `--base-href`. O scr
 
 O segundo workflow concluiu build e upload, mas falhou no commit da branch `gh-pages` por identidade Git ausente no runner. O workflow agora configura `github-actions[bot]` antes da publicação.
 
+O terceiro workflow falhou apenas no push HTTPS da branch `gh-pages`, porque o clone interno não recebeu credencial. O deploy agora passa `GITHUB_TOKEN` explicitamente via URL autenticada do repositório.
+
 ## Próxima decisão recomendada
 
 Definir o recorte da experiência central do MVP. Recomendação inicial: landing/entrada + criação de personagem local + ficha jogável + compêndio básico.

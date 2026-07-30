@@ -124,6 +124,12 @@
 - Adicionada configuração global de `github-actions[bot]` antes do deploy.
 - Correção enviada no commit `9c5c8f5`; novo workflow disparado pelo push.
 
+### 2026-07-30 — Autenticação do publish corrigida
+
+- Diagnóstico recebido: `angular-cli-ghpages` conseguia commitar localmente, mas não conseguia ler usuário para fazer push HTTPS.
+- Configurado `GITHUB_TOKEN` no workflow e passado ao parâmetro `--repo` do `angular-cli-ghpages`.
+- Correção enviada no commit `7862513`.
+
 ### 2026-07-29 — Fundação do projeto
 
 - Repositório inspecionado; não havia estrutura de aplicação identificável.
