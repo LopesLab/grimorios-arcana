@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:pages": "ng build --base-href=/grimorios-arcana/",
-    "deploy:pages": "npm run build:pages && npx angular-cli-ghpages --dir=dist/grimorios-arcana/browser",
+    "deploy:pages": "npm run build:pages && npx angular-cli-ghpages --dir=dist/grimorios-arcana/browser --repo=https://x-access-token:$GITHUB_TOKEN@github.com/LopesLab/grimorios-arcana.git",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
