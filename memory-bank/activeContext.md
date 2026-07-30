@@ -45,6 +45,8 @@ Fase 6 implementada: revisão final do grimório, salvamento em `localStorage`, 
 
 Fase 7 preparada: dependência `angular-cli-ghpages`, scripts de build/deploy com base href, workflow do GitHub Actions e documentação de publicação adicionados. O repositório ainda não possui Git remoto, então a publicação real aguarda conexão com o GitHub.
 
+Repositório remoto configurado em `LopesLab/grimorios-arcana`. A credencial antiga foi removida, a autenticação correta funcionou e a branch local `main` está acompanhando `origin/main`.
+
 ## Próxima decisão recomendada
 
 Definir o recorte da experiência central do MVP. Recomendação inicial: landing/entrada + criação de personagem local + ficha jogável + compêndio básico.

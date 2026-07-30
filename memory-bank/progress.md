@@ -106,6 +106,12 @@
 - Build com `base href=/grimorios-arcana/` validado; 6 testes aprovados.
 - Publicação ainda não executada porque o repositório não possui Git remoto configurado.
 
+### 2026-07-30 — Repositório GitHub conectado
+
+- Configurado o remoto `LopesLab/grimorios-arcana`.
+- Removida a credencial GitHub incorreta que autenticava como outra conta.
+- Push executado com sucesso; `main` acompanha `origin/main` e o conteúdo remoto está atualizado.
+
 ### 2026-07-29 — Fundação do projeto
 
 - Repositório inspecionado; não havia estrutura de aplicação identificável.
