@@ -47,6 +47,8 @@ Fase 7 preparada: dependência `angular-cli-ghpages`, scripts de build/deploy co
 
 Repositório remoto configurado em `LopesLab/grimorios-arcana`. A credencial antiga foi removida, a autenticação correta funcionou e a branch local `main` está acompanhando `origin/main`.
 
+O primeiro workflow falhou porque `ng deploy` não aceitava `--base-href`. O script foi corrigido para executar `build:pages` e publicar `dist/grimorios-arcana/browser` com `angular-cli-ghpages`.
+
 ## Próxima decisão recomendada
 
 Definir o recorte da experiência central do MVP. Recomendação inicial: landing/entrada + criação de personagem local + ficha jogável + compêndio básico.

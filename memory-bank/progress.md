@@ -112,6 +112,12 @@
 - Removida a credencial GitHub incorreta que autenticava como outra conta.
 - Push executado com sucesso; `main` acompanha `origin/main` e o conteúdo remoto está atualizado.
 
+### 2026-07-30 — Correção do workflow de Pages
+
+- Diagnóstico recebido: `ng deploy --base-href` falhava com argumento desconhecido.
+- Corrigido `deploy:pages` para separar build com `base-href` e publicação via `angular-cli-ghpages`.
+- Build local de Pages validado e correção enviada ao GitHub para novo workflow.
+
 ### 2026-07-29 — Fundação do projeto
 
 - Repositório inspecionado; não havia estrutura de aplicação identificável.
