@@ -130,6 +130,13 @@
 - Configurado `GITHUB_TOKEN` no workflow e passado ao parâmetro `--repo` do `angular-cli-ghpages`.
 - Correção enviada no commit `7862513`.
 
+### 2026-07-30 — Distribuição inteligente de atributos
+
+- Alterado o início da ficha para cinco atributos zerados.
+- Implementada troca automática quando o usuário escolhe um valor já ocupado.
+- Adicionada opção “— escolher —” e explicação do comportamento na interface.
+- Adicionado teste unitário da troca; resultado: 7 testes aprovados e build aprovado.
+
 ### 2026-07-29 — Fundação do projeto
 
 - Repositório inspecionado; não havia estrutura de aplicação identificável.

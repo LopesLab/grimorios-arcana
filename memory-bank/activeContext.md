@@ -53,6 +53,8 @@ O segundo workflow concluiu build e upload, mas falhou no commit da branch `gh-p
 
 O terceiro workflow falhou apenas no push HTTPS da branch `gh-pages`, porque o clone interno não recebeu credencial. O deploy agora passa `GITHUB_TOKEN` explicitamente via URL autenticada do repositório.
 
+A distribuição de atributos foi refinada: novos personagens começam com todos os atributos em zero; escolhas repetidas liberam o valor anterior e trocas entre valores ocupados preservam uma distribuição válida.
+
 ## Próxima decisão recomendada
 
 Definir o recorte da experiência central do MVP. Recomendação inicial: landing/entrada + criação de personagem local + ficha jogável + compêndio básico.

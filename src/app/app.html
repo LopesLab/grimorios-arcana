@@ -45,7 +45,7 @@
           <p class="eyebrow accent">OS CINCO FUNDAMENTOS</p>
           <h2>Atributos</h2>
         </div>
-        <span class="helper-text">Distribua 16 · 14 · 12 · 10 · 8</span>
+        <span class="helper-text">Escolha cada valor uma vez. Valores ocupados são trocados.</span>
       </div>
 
       <div class="attributes-grid">
@@ -53,10 +53,11 @@
           <label class="attribute-card" [class.invalid]="!isValid() && attributeValue(attribute.key) === 0">
             <span class="attribute-topline">
               <span class="attribute-name">{{ attribute.label }}</span>
-              <span class="attribute-percent">{{ attributePercentage(attribute.key) }}%</span>
+              <span class="attribute-percent">{{ attributeValue(attribute.key) === 0 ? '—' : attributePercentage(attribute.key) + '%' }}</span>
             </span>
             <span class="attribute-description">{{ attribute.description }}</span>
             <select class="attribute-select" [value]="attributeValue(attribute.key)" [attr.aria-label]="'Valor de ' + attribute.label" (change)="setAttribute(attribute.key, $event)">
+              <option value="0">— escolher —</option>
               @for (value of availableValues; track value) {
                 <option [value]="value">{{ value }}</option>
               }

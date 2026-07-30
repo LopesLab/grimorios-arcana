@@ -36,7 +36,7 @@ export class App {
   readonly selectedSpellIndex = signal(0);
   readonly spells = signal<Spell[]>([this.emptySpell(), this.emptySpell(), this.emptySpell()]);
   readonly savedCharacter = signal<Character | null>(null);
-  readonly attributes = signal<AttributeSet>({ power: 16, control: 14, dexterity: 12, will: 10, vitality: 8 });
+  readonly attributes = signal<AttributeSet>({ power: 0, control: 0, dexterity: 0, will: 0, vitality: 0 });
   readonly resources = computed(() => this.rules.deriveResources(this.attributes()));
   readonly attributesAreValid = computed(() => this.rules.isValidAttributeDistribution(this.attributes()));
   readonly isValid = computed(() => this.name().trim().length > 0 && this.rules.isValidAttributeDistribution(this.attributes()));
@@ -75,13 +75,23 @@ export class App {
 
   setAttribute(key: AttributeName, event: Event): void {
     const value = Number((event.target as HTMLSelectElement).value);
-    this.attributes.update((current) => ({ ...current, [key]: value }));
+    this.attributes.update((current) => {
+      const previousValue = current[key];
+      if (value === previousValue) return current;
+
+      const owner = (Object.keys(current) as AttributeName[]).find((attribute) => attribute !== key && current[attribute] === value);
+      if (!owner) return { ...current, [key]: value };
+
+      // A partir de zero, o valor repetido libera o atributo anterior.
+      // Ao trocar dois valores ocupados, preservamos a distribuição válida.
+      return { ...current, [key]: value, [owner]: previousValue };
+    });
   }
 
   reset(): void {
     this.name.set('');
     this.concept.set('');
-    this.attributes.set({ power: 16, control: 14, dexterity: 12, will: 10, vitality: 8 });
+    this.attributes.set({ power: 0, control: 0, dexterity: 0, will: 0, vitality: 0 });
     this.stage.set(1);
     this.affinityId.set('water');
     this.manaBehaviorId.set('compression');
