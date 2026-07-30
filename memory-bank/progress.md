@@ -118,6 +118,12 @@
 - Corrigido `deploy:pages` para separar build com `base-href` e publicação via `angular-cli-ghpages`.
 - Build local de Pages validado e correção enviada ao GitHub para novo workflow.
 
+### 2026-07-30 — Correção da identidade do runner
+
+- O workflow chegou a copiar os arquivos para `gh-pages`, mas falhou ao criar o commit por falta de `user.name` e `user.email`.
+- Adicionada configuração global de `github-actions[bot]` antes do deploy.
+- Correção enviada no commit `9c5c8f5`; novo workflow disparado pelo push.
+
 ### 2026-07-29 — Fundação do projeto
 
 - Repositório inspecionado; não havia estrutura de aplicação identificável.
