@@ -13,7 +13,7 @@ npm ci
 npm run deploy:pages
 ```
 
-O comando usa `angular-cli-ghpages`, gera a aplicação com `base href` `/grimorios-arcana/` e publica o conteúdo de produção na branch `gh-pages`.
+O comando gera a aplicação com `base href` `/grimorios-arcana/` e usa `angular-cli-ghpages` para publicar `dist/grimorios-arcana/browser` na branch `gh-pages`.
 
 ## Publicação automatizada
 
