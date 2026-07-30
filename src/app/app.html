@@ -204,4 +204,16 @@
       <aside class="summary-column"><div class="resource-card save-card"><p class="eyebrow accent">FICHA LOCAL</p><h2>{{ savedCharacter() ? 'Grimório salvo.' : 'Pronto para salvar.' }}</h2><p class="summary-concept">{{ savedCharacter() ? 'Sua ficha está guardada neste navegador.' : 'Salve para manter este personagem e liberar a exportação.' }}</p><button type="button" class="button primary full-button" [disabled]="!savedCharacter()" (click)="exportCharacter()">Baixar JSON <span aria-hidden="true">↓</span></button></div><div class="info-card"><p class="eyebrow accent">STATUS DO PLAYTEST</p><h3>Regras experimentais visíveis.</h3><p>Custos e propriedades estão marcados como parte do MVP e podem evoluir com os testes.</p></div></aside>
     </section>
   }
+
+  <footer class="site-footer">
+    <div>
+      <span class="footer-title">GRIMÓRIOS DE ARCANA</span>
+      <span class="footer-signature">Por Lopes e Joh</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/o_antilopes/" target="_blank" rel="noopener noreferrer">Lopes</a>
+      <a href="https://www.instagram.com/joh_manero/" target="_blank" rel="noopener noreferrer">Joh</a>
+      <a href="https://github.com/LopesLab" target="_blank" rel="noopener noreferrer">Lopes Lab · GitHub</a>
+    </div>
+  </footer>
 </main>
